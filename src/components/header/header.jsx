@@ -18,7 +18,7 @@ function Header() {
 
         <MobileMenu open={isOpenNodal} onClose={() => setIsOpenModal(false)} />
         <div className="flex items-center">
-          <ul className="hidden lg:flex items-center gap-10">
+          <ul className="hidden lg:flex items-center gap-8">
             <li className="font-bold text-[20px] text-blue-800 dark:text-white">
               Главная
             </li>
