@@ -1,9 +1,9 @@
+import Header from "../components/header/header";
+
 function App() {
   return (
-    <div>
-      Hello World
-      <h1>Hello World!!!!</h1>
-      <h3>Hello World!!!!!!!</h3>
+    <div className="min-w-[320px] dark:text-white">
+      <Header />
     </div>
   );
 }
