@@ -1,6 +1,8 @@
+import CardNum from "../components/card-number/card-num";
 import Header from "../components/header/header";
 import Hero from "../components/hero/hero";
 import About from "../components/section-about/about";
+import SectionCard from "../components/section-card/section-card";
 
 function App() {
   return (
@@ -8,6 +10,8 @@ function App() {
       <Header />
       <Hero />
       <About />
+      <SectionCard />
+      <CardNum />
     </div>
   );
 }
