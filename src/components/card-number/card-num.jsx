@@ -50,10 +50,10 @@ function CardNum() {
             <div>
               <img src={card1} alt="" />
             </div>
-            <h1 className="text-blue-700 font-bold text-lg">
+            <h1 className="text-blue-700 font-bold text-lg dark:text-white">
               Одноместный номер
             </h1>
-            <ul className="list-disc list-inside text-gray-700 text-lg ">
+            <ul className="list-disc list-inside text-gray-700 text-lg dark:text-white">
               <li>Душ</li>
               <li>Кровать</li>
               <li>Телевизор</li>
@@ -62,7 +62,7 @@ function CardNum() {
               <li>Что то еще</li>
             </ul>
             <div>
-              <h2 className="text-blue-700 font-bold text-[20px] text-center">
+              <h2 className="text-blue-700 font-bold text-[20px] text-center dark:text-white">
                 Стоимость
               </h2>
               <h1 className="text-center text-2xl">
