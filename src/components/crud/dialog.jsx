@@ -2,6 +2,7 @@ import { useState } from "react";
 
 function Dialog({ open, onClose, onSubmit }) {
   const [preview, setPreview] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   if (!open) return null;
 
@@ -10,21 +11,27 @@ function Dialog({ open, onClose, onSubmit }) {
     if (!file) return;
 
     const reader = new FileReader();
-    reader.onloadend = () => setPreview(reader.result); // base64
+    reader.onloadend = () => setPreview(reader.result);
     reader.readAsDataURL(file);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!preview) return;
 
-    onSubmit({ photo: preview });
+    setLoading(true); // 🔥 START LOADING
+    await onSubmit({ photo: preview });
+    setLoading(false); // 🔥 END LOADING
+    // модалка закроется в Crud
   };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       {/* Backdrop */}
-      <div className="absolute inset-0 bg-black/50" onClick={onClose} />
+      <div
+        className="absolute inset-0 bg-black/50"
+        onClick={!loading ? onClose : undefined}
+      />
 
       {/* Modal */}
       <div
@@ -34,39 +41,43 @@ function Dialog({ open, onClose, onSubmit }) {
       >
         <h2 className="font-semibold mb-3">Upload photo</h2>
 
-        {/* Preview */}
-        <div className="w-24 h-24 mx-auto mb-3 rounded-full bg-gray-100 overflow-hidden flex items-center justify-center">
-          {preview ? (
-            <img
-              src={preview}
-              alt="preview"
-              className="w-full h-full object-cover"
-            />
-          ) : (
-            <span className="text-xs text-gray-400">No photo</span>
-          )}
-        </div>
+        <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+          {/* Preview */}
+          <div className="w-24 h-24 mx-auto rounded-full bg-gray-100 overflow-hidden flex items-center justify-center">
+            {preview ? (
+              <img
+                src={preview}
+                alt="preview"
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <span className="text-xs text-gray-400">No photo</span>
+            )}
+          </div>
 
-        <input
-          type="file"
-          accept="image/*"
-          onChange={handleFileChange}
-          className="mb-4"
-        />
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleFileChange}
+            disabled={loading}
+          />
 
-        <div className="flex justify-end gap-2">
-          <button type="button" onClick={onClose}>
-            Cancel
-          </button>
+          <div className="flex justify-end gap-2">
+            <button type="button" onClick={onClose} disabled={loading}>
+              Cancel
+            </button>
 
-          <button
-            type="submit"
-            onClick={handleSubmit}
-            className="px-3 py-1 bg-blue-600 text-white rounded"
-          >
-            Save
-          </button>
-        </div>
+            <button
+              type="submit"
+              disabled={loading}
+              className={`px-3 py-1 rounded text-white ${
+                loading ? "bg-gray-400 cursor-not-allowed" : "bg-blue-600"
+              }`}
+            >
+              {loading ? "Saving..." : "Save"}
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );
