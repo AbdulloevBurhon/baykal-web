@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import Dialog from "./dialog.jsx";
-import Card from "./card1.jsx";
+import Dialog from "./Dialog";
+import Card from "./Card";
 
 const API = "https://68ff6375e02b16d1753dba14.mockapi.io/api/adress/usersInfo";
 
@@ -17,15 +17,11 @@ function Crud() {
 
   // POST
   const addUser = async (data) => {
-    console.log("POST START");
-
     const res = await fetch(API, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
     });
-
-    console.log("POST RESPONSE");
 
     const newUser = await res.json();
     setUsers((prev) => [...prev, newUser]);

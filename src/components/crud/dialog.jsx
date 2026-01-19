@@ -1,38 +1,71 @@
 import { useState } from "react";
 
+/* 🔥 Сжатие изображения */
+const compressImage = (file, maxSizeKB = 400) => {
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    const img = new Image();
+
+    reader.onload = () => {
+      img.src = reader.result;
+    };
+
+    img.onload = () => {
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+
+      let width = img.width;
+      let height = img.height;
+      let quality = 0.9;
+
+      const compress = () => {
+        canvas.width = width;
+        canvas.height = height;
+        ctx.drawImage(img, 0, 0, width, height);
+
+        const base64 = canvas.toDataURL("image/jpeg", quality);
+        const sizeKB = base64.length / 1024;
+
+        if (sizeKB > maxSizeKB && quality > 0.4) {
+          quality -= 0.1;
+          width *= 0.9;
+          height *= 0.9;
+          compress();
+        } else {
+          resolve(base64);
+        }
+      };
+
+      compress();
+    };
+
+    reader.readAsDataURL(file);
+  });
+};
+
 function Dialog({ open, onClose, onSubmit }) {
   const [preview, setPreview] = useState(null);
   const [loading, setLoading] = useState(false);
 
   if (!open) return null;
 
-  const handleFileChange = (e) => {
+  const handleFileChange = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
-    // ❗ лимит 500KB
-    if (file.size > 500 * 1024) {
-      alert("Image is too large. Max 500KB");
-      return;
-    }
-
-    const reader = new FileReader();
-    reader.onloadend = () => setPreview(reader.result);
-    reader.readAsDataURL(file);
+    setLoading(true);
+    const compressed = await compressImage(file);
+    setPreview(compressed);
+    setLoading(false);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!preview) return;
 
-    try {
-      setLoading(true);
-      await onSubmit({ photo: preview });
-    } catch (err) {
-      alert("Upload failed");
-    } finally {
-      setLoading(false); // ❗ ВСЕГДА
-    }
+    setLoading(true);
+    await onSubmit({ photo: preview });
+    setLoading(false);
   };
 
   return (
@@ -49,10 +82,9 @@ function Dialog({ open, onClose, onSubmit }) {
         onClick={(e) => e.stopPropagation()}
         onTouchStart={(e) => e.stopPropagation()}
       >
-        <h2 className="font-semibold mb-3">Upload photo</h2>
+        <h2 className="font-semibold mb-3 text-center">Upload photo</h2>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-          {/* Preview */}
           <div className="w-24 h-24 mx-auto rounded-full bg-gray-100 overflow-hidden flex items-center justify-center">
             {preview ? (
               <img
@@ -72,21 +104,15 @@ function Dialog({ open, onClose, onSubmit }) {
             disabled={loading}
           />
 
-          <div className="flex justify-end gap-2">
-            <button type="button" onClick={onClose} disabled={loading}>
-              Cancel
-            </button>
-
-            <button
-              type="submit"
-              disabled={loading}
-              className={`px-3 py-1 rounded text-white ${
-                loading ? "bg-gray-400 cursor-not-allowed" : "bg-blue-600"
-              }`}
-            >
-              {loading ? "Saving..." : "Save"}
-            </button>
-          </div>
+          <button
+            type="submit"
+            disabled={loading}
+            className={`py-2 rounded text-white ${
+              loading ? "bg-gray-400" : "bg-blue-600"
+            }`}
+          >
+            {loading ? "Saving..." : "Save"}
+          </button>
         </form>
       </div>
     </div>
