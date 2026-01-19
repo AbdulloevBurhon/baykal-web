@@ -4,7 +4,7 @@ import img3 from "./img/img3.png";
 import card1 from "./img/card1.png";
 function CardNum() {
   return (
-    <div className="flex flex-col gap-8 m-auto py-5 min-w-[320px]">
+    <div className="flex flex-col gap-8 m-auto py-5 px-3 min-w-[320px]">
       <div className="flex flex-col gap-4 justify-center text-center lg:text-left">
         <img src={imgNum} alt="section" width="350" className="m-auto lg:m-0" />
       </div>

@@ -30,6 +30,15 @@ function Card({ user }) {
 
       {/* Дата */}
       <span className="text-xs text-gray-400">01.02--03.02</span>
+      {/* 👇 ЭТО РЕШАЕТ ВСЁ */}
+      <div className="mt-auto flex gap-3 justify-center">
+        <button className="px-4 py-1 bg-red-500 text-white rounded-md">
+          Delete
+        </button>
+        <button className="px-4 py-1 bg-blue-500 text-white rounded-md">
+          Edit
+        </button>
+      </div>
     </div>
   );
 }

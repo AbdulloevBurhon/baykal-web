@@ -69,7 +69,7 @@ function SectionCard() {
   ];
 
   return (
-    <div className="flex flex-col gap-8 m-auto py-5 min-w-[320px]">
+    <div className="flex flex-col gap-8 m-auto py-5 min-w-[320px] px-3">
       <div className="flex flex-col gap-4 justify-center text-center lg:text-left">
         <img
           src={imgSection}

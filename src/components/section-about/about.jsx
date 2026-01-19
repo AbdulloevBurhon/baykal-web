@@ -7,6 +7,7 @@ function About() {
     flex flex-col items-center gap-8
     lg:flex-row lg:justify-between lg:items-center
     m-auto py-5 min-w-[320px]
+    px-3
   "
     >
       {/* Левая часть */}
