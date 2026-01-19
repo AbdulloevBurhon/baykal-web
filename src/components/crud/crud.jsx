@@ -15,17 +15,26 @@ function Crud() {
       .then(setUsers);
   }, []);
 
-  // POST
+  // POST — 🔥 ВОЗВРАЩАЕМ РЕЗУЛЬТАТ
   const addUser = async (data) => {
-    const res = await fetch(API, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    });
+    try {
+      const res = await fetch(API, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
 
-    const newUser = await res.json();
-    setUsers((prev) => [...prev, newUser]);
-    setOpen(false);
+      if (!res.ok) throw new Error("POST failed");
+
+      const newUser = await res.json();
+      setUsers((prev) => [...prev, newUser]);
+      setOpen(false);
+
+      return true; // ✅ ВАЖНО
+    } catch (e) {
+      console.error(e);
+      return false; // ✅ ВАЖНО
+    }
   };
 
   return (

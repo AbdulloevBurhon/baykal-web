@@ -6,9 +6,7 @@ const compressImage = (file, maxSizeKB = 400) => {
     const reader = new FileReader();
     const img = new Image();
 
-    reader.onload = () => {
-      img.src = reader.result;
-    };
+    reader.onload = () => (img.src = reader.result);
 
     img.onload = () => {
       const canvas = document.createElement("canvas");
@@ -54,9 +52,23 @@ function Dialog({ open, onClose, onSubmit }) {
     if (!file) return;
 
     setLoading(true);
-    const compressed = await compressImage(file);
-    setPreview(compressed);
-    setLoading(false);
+
+    try {
+      const compressed = await compressImage(file);
+
+      // 🔥 КРИТИЧЕСКИЙ КОНТРОЛЬ
+      if (compressed.length > 600_000) {
+        alert("Image too large even after compression");
+        setLoading(false);
+        return;
+      }
+
+      setPreview(compressed);
+    } catch {
+      alert("Image processing failed");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -64,8 +76,14 @@ function Dialog({ open, onClose, onSubmit }) {
     if (!preview) return;
 
     setLoading(true);
-    await onSubmit({ photo: preview });
+
+    const success = await onSubmit({ photo: preview });
+
     setLoading(false);
+
+    if (!success) {
+      alert("Upload failed. Try another image.");
+    }
   };
 
   return (
