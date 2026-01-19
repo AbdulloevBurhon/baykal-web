@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import Dialog from "./Dialog";
-import Card from "./Card";
+import Dialog from "./dialog";
+import Card from "./card1";
 
 const API = "https://68ff6375e02b16d1753dba14.mockapi.io/api/adress/usersInfo";
 
