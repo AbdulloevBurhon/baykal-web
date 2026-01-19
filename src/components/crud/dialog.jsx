@@ -10,6 +10,12 @@ function Dialog({ open, onClose, onSubmit }) {
     const file = e.target.files[0];
     if (!file) return;
 
+    // ❗ лимит 500KB
+    if (file.size > 500 * 1024) {
+      alert("Image is too large. Max 500KB");
+      return;
+    }
+
     const reader = new FileReader();
     reader.onloadend = () => setPreview(reader.result);
     reader.readAsDataURL(file);
@@ -19,10 +25,14 @@ function Dialog({ open, onClose, onSubmit }) {
     e.preventDefault();
     if (!preview) return;
 
-    setLoading(true); // 🔥 START LOADING
-    await onSubmit({ photo: preview });
-    setLoading(false); // 🔥 END LOADING
-    // модалка закроется в Crud
+    try {
+      setLoading(true);
+      await onSubmit({ photo: preview });
+    } catch (err) {
+      alert("Upload failed");
+    } finally {
+      setLoading(false); // ❗ ВСЕГДА
+    }
   };
 
   return (

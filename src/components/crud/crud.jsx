@@ -17,11 +17,15 @@ function Crud() {
 
   // POST
   const addUser = async (data) => {
+    console.log("POST START");
+
     const res = await fetch(API, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
     });
+
+    console.log("POST RESPONSE");
 
     const newUser = await res.json();
     setUsers((prev) => [...prev, newUser]);
