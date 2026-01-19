@@ -8,14 +8,12 @@ function Crud() {
   const [users, setUsers] = useState([]);
   const [open, setOpen] = useState(false);
 
-  // GET
   useEffect(() => {
     fetch(API)
       .then((res) => res.json())
       .then(setUsers);
   }, []);
 
-  // POST — 🔥 ВОЗВРАЩАЕМ РЕЗУЛЬТАТ
   const addUser = async (data) => {
     try {
       const res = await fetch(API, {
