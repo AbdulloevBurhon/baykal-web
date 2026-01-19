@@ -1,7 +1,4 @@
-import { useState } from "react";
 function Dialog({ open, onClose, onSubmit }) {
-  const [preview, setPreview] = useState(null);
-
   if (!open) return null;
 
   const handleSubmit = (e) => {
@@ -11,18 +8,8 @@ function Dialog({ open, onClose, onSubmit }) {
 
     onSubmit({
       name: form.name.value,
-      description: form.description.value,
-      photo: preview,
+      desc: form.desc.value,
     });
-  };
-
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onloadend = () => setPreview(reader.result);
-    reader.readAsDataURL(file);
   };
 
   return (
@@ -32,31 +19,41 @@ function Dialog({ open, onClose, onSubmit }) {
 
       {/* Modal */}
       <div
-        className="relative z-10 w-full max-w-md bg-white rounded-xl shadow-lg"
+        className="relative z-10 w-full max-w-sm bg-white rounded-xl p-4"
         onClick={(e) => e.stopPropagation()}
         onTouchStart={(e) => e.stopPropagation()}
       >
-        <div className="flex justify-between px-5 py-4 border-b">
-          <h2>Add User</h2>
-          <button type="button" onClick={onClose}>
-            ✕
-          </button>
-        </div>
+        <h2 className="text-lg font-semibold mb-3">Add user</h2>
 
-        <form onSubmit={handleSubmit} className="p-5 flex flex-col gap-4">
-          <input name="name" placeholder="Full name" />
-          <input type="file" accept="image/*" onChange={handleFileChange} />
-          <textarea name="description" placeholder="Description" />
+        <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+          <input
+            name="name"
+            placeholder="Name"
+            className="border px-3 py-2 rounded"
+          />
+
+          <textarea
+            name="desc"
+            placeholder="Description"
+            className="border px-3 py-2 rounded"
+          />
 
           <div className="flex justify-end gap-3">
             <button type="button" onClick={onClose}>
               Cancel
             </button>
-            <button type="submit">Save</button>
+
+            <button
+              type="submit"
+              className="bg-blue-600 text-white px-3 py-1 rounded"
+            >
+              Save
+            </button>
           </div>
         </form>
       </div>
     </div>
   );
 }
+
 export default Dialog;
