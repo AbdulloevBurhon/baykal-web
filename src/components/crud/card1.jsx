@@ -17,7 +17,7 @@ function Card({ user }) {
     >
       {/* Аватар */}
       <img
-        src={user.img || def}
+        src={user.photo || def}
         alt="avatar"
         className="w-16 h-16 rounded-full"
       />
@@ -26,7 +26,10 @@ function Card({ user }) {
       <h3 className="text-blue-600 font-semibold">{user.name}</h3>
 
       {/* Описание */}
-      <p className="text-gray-500 text-sm leading-relaxed">{user.desc}</p>
+      <p className="text-gray-500 text-sm leading-relaxed">
+        {" "}
+        {user.description}
+      </p>
 
       {/* Дата */}
       <span className="text-xs text-gray-400">01.02--03.02</span>

@@ -12,12 +12,10 @@ function Dialog({ open, onClose, onSubmit }) {
     const data = {
       name: form.name.value,
       description: form.description.value,
-      photo: preview, // из state
+      photo: preview, // base64
     };
-    onSubmit(data);
-    console.log("FORM DATA:", data);
 
-    // тут можешь отправлять на сервер
+    onSubmit(data);
   };
   const handleFileChange = (e) => {
     const file = e.target.files[0];
