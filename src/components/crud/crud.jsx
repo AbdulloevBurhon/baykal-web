@@ -1,26 +1,27 @@
 import { useEffect, useState } from "react";
-import Dialog from "./dialog";
-import Card from "./card1";
+import Dialog from "./dialog.jsx";
+import Card from "./card1.jsx";
+
+const API = "https://68ff6375e02b16d1753dba14.mockapi.io/api/adress/usersInfo";
 
 function Crud() {
   const [users, setUsers] = useState([]);
   const [open, setOpen] = useState(false);
 
+  // GET
   useEffect(() => {
-    fetch("https://68ff6375e02b16d1753dba14.mockapi.io/api/adress/usersInfo")
+    fetch(API)
       .then((res) => res.json())
       .then(setUsers);
   }, []);
 
-  const addUser = async (user) => {
-    const res = await fetch(
-      "https://68ff6375e02b16d1753dba14.mockapi.io/api/adress/usersInfo",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(user),
-      },
-    );
+  // POST
+  const addUser = async (data) => {
+    const res = await fetch(API, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
 
     const newUser = await res.json();
     setUsers((prev) => [...prev, newUser]);
@@ -31,9 +32,9 @@ function Crud() {
     <div className="p-6">
       <button
         onClick={() => setOpen(true)}
-        className="bg-blue-600 text-white px-4 py-2 rounded"
+        className="px-4 py-2 bg-blue-600 text-white rounded"
       >
-        Add
+        Add photo
       </button>
 
       <Dialog open={open} onClose={() => setOpen(false)} onSubmit={addUser} />

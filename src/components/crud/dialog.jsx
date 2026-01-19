@@ -1,15 +1,24 @@
+import { useState } from "react";
+
 function Dialog({ open, onClose, onSubmit }) {
+  const [preview, setPreview] = useState(null);
+
   if (!open) return null;
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onloadend = () => setPreview(reader.result); // base64
+    reader.readAsDataURL(file);
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!preview) return;
 
-    const form = e.target;
-
-    onSubmit({
-      name: form.name.value,
-      desc: form.desc.value,
-    });
+    onSubmit({ photo: preview });
   };
 
   return (
@@ -19,38 +28,45 @@ function Dialog({ open, onClose, onSubmit }) {
 
       {/* Modal */}
       <div
-        className="relative z-10 w-full max-w-sm bg-white rounded-xl p-4"
+        className="relative z-10 bg-white p-4 rounded-xl w-72"
         onClick={(e) => e.stopPropagation()}
         onTouchStart={(e) => e.stopPropagation()}
       >
-        <h2 className="text-lg font-semibold mb-3">Add user</h2>
+        <h2 className="font-semibold mb-3">Upload photo</h2>
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-          <input
-            name="name"
-            placeholder="Name"
-            className="border px-3 py-2 rounded"
-          />
+        {/* Preview */}
+        <div className="w-24 h-24 mx-auto mb-3 rounded-full bg-gray-100 overflow-hidden flex items-center justify-center">
+          {preview ? (
+            <img
+              src={preview}
+              alt="preview"
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <span className="text-xs text-gray-400">No photo</span>
+          )}
+        </div>
 
-          <textarea
-            name="desc"
-            placeholder="Description"
-            className="border px-3 py-2 rounded"
-          />
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handleFileChange}
+          className="mb-4"
+        />
 
-          <div className="flex justify-end gap-3">
-            <button type="button" onClick={onClose}>
-              Cancel
-            </button>
+        <div className="flex justify-end gap-2">
+          <button type="button" onClick={onClose}>
+            Cancel
+          </button>
 
-            <button
-              type="submit"
-              className="bg-blue-600 text-white px-3 py-1 rounded"
-            >
-              Save
-            </button>
-          </div>
-        </form>
+          <button
+            type="submit"
+            onClick={handleSubmit}
+            className="px-3 py-1 bg-blue-600 text-white rounded"
+          >
+            Save
+          </button>
+        </div>
       </div>
     </div>
   );
